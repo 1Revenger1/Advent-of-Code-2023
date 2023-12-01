@@ -18,34 +18,43 @@ pub fn solve(str: String) -> SolutionPair {
     }).sum();
 
     let sol2: u32 = str.lines().map(|line| {
-        let mut first_idx: usize = usize::MAX;
-        let mut last_idx: usize = 0;
         let mut last: u32 = 0;
         let mut first: u32 = 0;
 
-        for opt in OPTIONS {
-            let idx = line.find(opt).unwrap_or_else(|| usize::MAX);
-            if idx <= first_idx {
-                if NUMS.contains(&opt) {
-                    first = NUMS.iter().position(|p| p == &opt).unwrap() as u32;
-                } else {
-                    first = opt.chars().next().unwrap().to_digit(10).unwrap();
-                }
-                
-                first_idx = idx;
-            }
-            
-            let idx = line.rfind(opt).unwrap_or_else(|| usize::MAX);
-            if idx >= last_idx && idx != usize::MAX {
-                if NUMS.contains(&opt) {
-                    last = NUMS.iter().position(|p| p == &opt).unwrap() as u32;
-                } else {
-                    last = opt.chars().next().unwrap().to_digit(10).unwrap();
+        'outer: for i in 0..line.len() {
+            for opt in OPTIONS {   
+                if i + opt.len() > line.len() {
+                    continue;
                 }
 
-                last_idx = idx;
-            }
+                if &line[i..(i + opt.len())] == opt {
+                    if NUMS.contains(&opt) {
+                        first = NUMS.iter().position(|p| p == &opt).unwrap() as u32;
+                    } else {
+                        first = opt.chars().next().unwrap().to_digit(10).unwrap();
+                    }
 
+                    break 'outer;
+                }
+            }
+        }
+
+        'outer: for i in (1..=line.len()).rev() {
+            for opt in OPTIONS {
+                if i < opt.len() {
+                    continue;
+                }
+
+                if &line[(i - opt.len())..(i)] == opt {
+                    if NUMS.contains(&opt) {
+                        last = NUMS.iter().position(|p| p == &opt).unwrap() as u32;
+                    } else {
+                        last = opt.chars().next().unwrap().to_digit(10).unwrap();
+                    }
+
+                    break 'outer;
+                }
+            }
         }
 
         (first * 10) + last
