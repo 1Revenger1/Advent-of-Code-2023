@@ -1,3 +1,3 @@
 pub mod solution;
 
-pub use solution::Solution;
+pub use self::solution::Solution;

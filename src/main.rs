@@ -9,6 +9,7 @@ use days::{day01, day02, day03, day04, day05,
            day21, day22, day23, day24, day25};
 use std::env;
 use std::time::Instant;
+use std::fs;
 
 pub type SolutionPair = (Solution, Solution);
 
@@ -27,8 +28,12 @@ fn main() {
     for day in days {
         let func = get_day_solver(day);
 
+        // Read in input file
+        let input = fs::read_to_string(format!("./input/day{:02}.txt", day))
+            .unwrap_or_else(|v| panic!("Input file not found for day {:02}\n\t{}", day, v));
+
         let time = Instant::now();
-        let (p1, p2) = func();
+        let (p1, p2) = func(input);
         let elapsed_ms = time.elapsed().as_nanos() as f64 / 1_000_000.0;
         
         println!("\n=== Day {:02} ===", day);
@@ -42,7 +47,7 @@ fn main() {
     println!("Total runtime: {:.4} ms", runtime);
 }
 
-fn get_day_solver(day: u8) -> fn() -> SolutionPair {
+fn get_day_solver(day: u8) -> fn(String) -> SolutionPair {
     match day {
          1 => day01::solve,
          2 => day02::solve,
