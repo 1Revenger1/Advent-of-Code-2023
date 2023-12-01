@@ -1,9 +1,7 @@
 use crate::{Solution, SolutionPair};
 
-///////////////////////////////////////////////////////////////////////////////
-
-const NUMS: [&'static str; 10] = ["zero", "one", "two", "three", "four", "five", "six", "seven", "eight", "nine"];
 const OPTIONS: [&'static str; 19] = ["one", "two", "three", "four", "five", "six", "seven", "eight", "nine", "0", "1", "2", "3", "4", "5", "6", "7", "8", "9"];
+const MAP: [u32; 19] = [1, 2, 3, 4, 5, 6, 7, 8, 9, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9];
 
 pub fn solve(str: String) -> SolutionPair {
     let sol1: u32 = str.lines().map(|line| {
@@ -22,36 +20,28 @@ pub fn solve(str: String) -> SolutionPair {
         let mut first: u32 = 0;
 
         'outer: for i in 0..line.len() {
-            for opt in OPTIONS {   
+            for j in 0..OPTIONS.len() {
+                let opt = OPTIONS[j];   
                 if i + opt.len() > line.len() {
                     continue;
                 }
 
                 if &line[i..(i + opt.len())] == opt {
-                    if NUMS.contains(&opt) {
-                        first = NUMS.iter().position(|p| p == &opt).unwrap() as u32;
-                    } else {
-                        first = opt.chars().next().unwrap().to_digit(10).unwrap();
-                    }
-
+                    first = MAP[j];
                     break 'outer;
                 }
             }
         }
 
         'outer: for i in (1..=line.len()).rev() {
-            for opt in OPTIONS {
+            for o in 0..OPTIONS.len() {
+                let opt = OPTIONS[o];
                 if i < opt.len() {
                     continue;
                 }
 
                 if &line[(i - opt.len())..(i)] == opt {
-                    if NUMS.contains(&opt) {
-                        last = NUMS.iter().position(|p| p == &opt).unwrap() as u32;
-                    } else {
-                        last = opt.chars().next().unwrap().to_digit(10).unwrap();
-                    }
-
+                    last = MAP[o];
                     break 'outer;
                 }
             }
