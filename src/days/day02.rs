@@ -6,7 +6,7 @@ pub fn solve(str: String) -> SolutionPair {
     let mut idx = 0;
 
     let sol1: u64 = str.lines().map(|line| {
-        let line = &line[(line.find(':').unwrap() + 1)..line.len()];
+        let line = &line[(line.find(':').unwrap() + 1)..];
         let pulls: Vec<&str> = line.split(|c| c == ';' || c == ',').collect();
 
         idx += 1;
@@ -32,7 +32,7 @@ pub fn solve(str: String) -> SolutionPair {
     }).sum();
 
     let sol2: u64 = str.lines().map(|line| {
-        let line = &line[(line.find(':').unwrap() + 1)..line.len()];
+        let line = &line[(line.find(':').unwrap() + 1)..];
 
         let mut map = HashMap::from([
             ("red", 0),
