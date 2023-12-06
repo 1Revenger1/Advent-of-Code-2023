@@ -1,7 +1,7 @@
 use crate::{Solution, SolutionPair};
 use std::ops::Range;
 
-type SeedRange = (Range<u64>, u64, u64);
+type SeedRange = (Range<u64>, Range<u64>, u64, u64);
 
 fn map_range(str: &str) -> Vec<SeedRange> {
     str.lines().skip(1).map(|map| {
@@ -9,7 +9,7 @@ fn map_range(str: &str) -> Vec<SeedRange> {
             .split_whitespace()
             .map(|val| val.parse().unwrap())
             .collect();
-        (res[1]..res[1] + res[2], res[1], res[0])
+        (res[1]..res[1] + res[2], res[0]..res[0] + res[2], res[1], res[0])
     })
     .collect()
 }
@@ -32,7 +32,7 @@ pub fn solve(str: String) -> SolutionPair {
         for seed in temp.iter_mut() {
             match map.iter().find(|r| r.0.contains(seed)) {
                 Some(range) => {
-                    *seed = (*seed) - range.1 + range.2;
+                    *seed = (*seed) - range.2 + range.3;
                 }
                 None => { /* Nothing happens */ }
             }
@@ -53,12 +53,12 @@ pub fn solve(str: String) -> SolutionPair {
     let mut sol2 = 0;
 
     // Brute force backwards from location to seed for part 2
-    'outer: for i in 0..u32::MAX {
-        let mut seed: u64 = i as u64;
+    'outer: for i in 0..u64::MAX {
+        let mut seed: u64 = i;
         for map in maps.iter().rev() { 
-            match map.iter().find(|r| r.0.contains(&(seed - r.2 + r.1))) {
+            match map.iter().find(|r| r.1.contains(&seed)) {
                 Some(range) => {
-                    seed = seed - range.2 + range.1;
+                    seed = seed - range.3 + range.2;
                 }
                 None => { /* Nothing happens */ }
             }
