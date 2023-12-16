@@ -10,8 +10,6 @@ const WEST: DELTA = (-1, 0);
 const SOUTH: DELTA = (0, 1);
 const EAST: DELTA = (1, 0);
 
-const DIRS: [DELTA; 4] = [NORTH, WEST, SOUTH, EAST];
-
 fn go_dir<'a>(queue: &mut VecDeque<(&'a DELTA, XY)>, map: &Vec<Vec<char>>, dir: &'a DELTA, pos: XY) {
     let (x, y) = pos;
     let new_x = ((x as i64) + dir.0) as usize;
