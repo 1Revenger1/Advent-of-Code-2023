@@ -1,4 +1,3 @@
 pub mod solution;
 pub mod math;
-
-pub use self::solution::Solution;
+pub mod lib2d;
