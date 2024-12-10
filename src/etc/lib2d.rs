@@ -7,7 +7,7 @@ use std::ops;
 /// 
 
 #[derive(Clone, Copy, PartialEq, Eq, Hash, Debug)]
-pub struct Coordinates(pub i32, pub i32);
+pub struct Coordinates(pub i64, pub i64);
 
 impl ops::AddAssign<Coordinates> for Coordinates {
     fn add_assign(&mut self, rhs: Coordinates) {
@@ -22,6 +22,13 @@ impl ops::Add<Coordinates> for Coordinates {
 
     fn add(self, _rhs: Coordinates) -> Coordinates {
         return Coordinates(self.0 + _rhs.0, self.1 + _rhs.1)
+    }
+}
+
+impl ops::Mul<u64> for Coordinates {
+    type Output = Coordinates;
+    fn mul(self, rhs: u64) -> Self::Output {
+        Coordinates(self.0 * rhs as i64, self.1 * rhs as i64)
     }
 }
 
@@ -83,8 +90,8 @@ impl<T: Clone + Copy + PartialEq + Eq> Grid<T> {
             .collect();
 
         let max_size = Coordinates(
-            grid[0].len() as i32,
-            grid.len() as i32
+            grid[0].len() as i64,
+            grid.len() as i64
         );
 
         Grid {
@@ -110,7 +117,7 @@ impl<T: Clone + Copy + PartialEq + Eq> Grid<T> {
         for (y, l) in self.grid.iter().enumerate() {
             for (x, v) in l.iter().enumerate() {
                 if *v == f {
-                    return Some(Coordinates(x as i32, y as i32));
+                    return Some(Coordinates(x as i64, y as i64));
                 }
             }
         }
